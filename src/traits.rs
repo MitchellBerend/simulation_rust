@@ -50,20 +50,40 @@
 //!                     Agent_2.collect()
 //!                                 Agent_3.collect() ]
 //!
+//! An Agent needs to have the following fields:
+//!     -
+//!
+//! An Environment needs to have the following fields: 
+//!     - agent_type
+//!     - population
 
 
+use color_eyre::{Report, eyre::eyre};
 
 
 pub trait Agent {
+    ///
+    fn generate() -> Result<Box<Self>, Report> where Self: Sized;
 
-    fn generate() -> Result<Self, String> where Self: Sized;
+    ///
+    fn collect(&self) -> Result<(), Report>;
 
-    fn tick() -> Result<(), String>;
+    ///
+    fn tick(&self) -> Result<(), Report>;
 }
 
 
 pub trait Environment {
-    fn generate() -> Result<Self, String> where Self: Sized;
+    ///
+    fn generate<T: Agent>() -> Result<Self, Report> where Self: Sized;
 
-    fn collect() -> Result<(), String>;
+    ///
+    fn collect(&self) -> Result<(), Report>;
+
+    ///
+    fn tick(&self) -> Result<(), Report>;
+
+    /// This method needs to return the full vector that holds all the agents.
+    fn population(&self) -> Result<Vec<Box<dyn Agent>>, Report>;
 }
+
