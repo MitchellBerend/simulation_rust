@@ -75,7 +75,7 @@ pub trait Agent {
 
 pub trait Environment {
     ///
-    fn generate<A: Agent>(pop: Vec<A>) -> Result<Self, Report> where Self: Sized;
+    fn generate<A: Agent>(pop: Vec<Box<A>>) -> Result<Self, Report> where Self: Sized;
 
     ///
     fn collect(&self) -> Result<(), Report>;
@@ -83,7 +83,7 @@ pub trait Environment {
     ///
     fn tick(&self) -> Result<(), Report>;
 
-    fn pop<A: Agent>(&self) -> Result<A, Report>;
+    fn pop<A: Agent>(&self) -> Result<Box<A>, Report>;
 
     /// This method needs to return the full vector that holds all the agents.
     fn len(&self) -> usize;
