@@ -17,39 +17,39 @@
 //! The process will look something like this:
 //! 
 //!
-//!                     Environment
+//! /*                Environment
 //!                         |
 //!                 --------------------
 //!                 |       |           |
 //!             [Agent_1,   |           |
 //!                         Agent_2,    |
 //!                                     Agent_3, ... ]
-//!
+//! */
 //!
 //! The environment will give out a tick command that propagates down to all the agents contained
 //! in its system.
 //!
-//!                     Environment.tick()
+//! /*                Environment.tick()
 //!                         |
 //!                 --------------------
 //!                 |       |           |
 //!     [Agent_1.tick()     |           |
 //!                     Agent_2.tick()  |
 //!                                 Agent_3.tick() ]
-//!
+//! */
 //!
 //! Once that round is completely finished the environment will collect all the public data and
 //! write it to a file in json format.
 //!
 //!
-//!                     Environment.collect()
+//! /*                  Environment.collect()
 //!                         |
 //!                 --------------------
 //!                 |       |           |
 //!     [Agent_1.collect()  |           |
 //!                     Agent_2.collect()
 //!                                 Agent_3.collect() ]
-//!
+//! */
 //! An Agent needs to have the following fields:
 //!     -
 //!
@@ -58,24 +58,24 @@
 //!     - population
 
 
-use color_eyre::{Report, eyre::eyre};
+use color_eyre::Report;
 
 
 pub trait Agent {
     ///
-    fn generate() -> Result<Box<Self>, Report> where Self: Sized;
+    fn generate() -> Result<Self, Report> where Self: Sized;
 
     ///
     fn collect(&self) -> Result<(), Report>;
 
     ///
-    fn tick(&self) -> Result<(), Report>;
+    fn tick(&mut self) -> Result<(), Report>;
 }
 
 
 pub trait Environment {
     ///
-    fn generate<T: Agent>() -> Result<Self, Report> where Self: Sized;
+    fn generate<A: Agent>(pop: Vec<A>) -> Result<Self, Report> where Self: Sized;
 
     ///
     fn collect(&self) -> Result<(), Report>;
@@ -83,7 +83,9 @@ pub trait Environment {
     ///
     fn tick(&self) -> Result<(), Report>;
 
+    fn pop<A: Agent>(&self) -> Result<A, Report>;
+
     /// This method needs to return the full vector that holds all the agents.
-    fn population(&self) -> Result<Vec<Box<dyn Agent>>, Report>;
+    fn len(&self) -> usize;
 }
 
