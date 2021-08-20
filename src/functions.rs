@@ -10,9 +10,9 @@ use color_eyre::Report;
 use crate::traits::{Environment, Agent};
 
 
-pub fn generate_env<E: 'static + Environment, A: 'static + Agent>(population_size: u16) -> Result<Box<dyn Environment>, Report> {
+pub fn generate_env<E: 'static + Environment, A: 'static + Agent>(pop_size: u16) -> Result<Box<dyn Environment>, Report> {
     let mut pop: Vec<Box<dyn Agent>> = vec!();
-    for _ in 0..population_size {
+    for _ in 0..pop_size {
         let agent: Box<dyn Agent> = A::generate()?;
         pop.push(agent);
     }
@@ -21,8 +21,19 @@ pub fn generate_env<E: 'static + Environment, A: 'static + Agent>(population_siz
 }
 
 
-#[allow(dead_code)]
-pub fn tick(mut environment: Box<dyn Environment>) -> Result<(), Report> {
+pub fn tick(mut environment: Box<dyn Environment>) -> Result<Box<dyn Environment>, Report> {
     (*environment).tick()?;
-    Ok(())
+    Ok(environment)
+}
+
+pub fn tick_collect(mut environment: Box<dyn Environment>) -> Result<Box<dyn Environment>, Report> {
+    (*environment).tick()?;
+    (*environment).collect()?;
+    Ok(environment)
+}
+
+
+pub fn collect(environment: Box<dyn Environment>) -> Result<Box<dyn Environment>, Report> {
+    (*environment).collect()?;
+    Ok(environment)
 }

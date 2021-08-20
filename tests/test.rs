@@ -55,12 +55,23 @@ impl Agent for TestAgent {
 
 
 #[test]
-fn it_works() -> Result<(), Report>{
+fn test_tick() -> Result<(), Report> {
     let mut env = generate_env::<TestEnv, TestAgent>(10)?;
     for year in 0..100 {
         println!("Year: {}", year);
-        env.tick()?;
-        env.collect()?;
+        env = tick(env)?;
+    }
+    Ok(())
+}
+
+
+#[test]
+fn test_tick_collect_once() -> Result<(), Report> {
+    let mut env = generate_env::<TestEnv, TestAgent>(10)?;
+    for _() -> Result<(), Report> {
+    let mut env = generate_env::<TestEnv, TestAgent>(10)?;
+    for _ in 0..100 {
+        env = tick_collect(env)?;
     }
     Ok(())
 }
