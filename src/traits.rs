@@ -63,7 +63,7 @@ use color_eyre::Report;
 
 pub trait Agent {
     ///
-    fn generate() -> Result<Self, Report> where Self: Sized;
+    fn generate() -> Result<Box<Self>, Report> where Self: Sized;
 
     ///
     fn collect(&self) -> Result<(), Report>;
@@ -75,17 +75,12 @@ pub trait Agent {
 
 pub trait Environment {
     ///
-    fn generate<A: Agent>(pop: Vec<Box<A>>) -> Result<Self, Report> where Self: Sized;
+    fn generate(pop: Vec<Box<dyn Agent>>) -> Result<Box<Self>, Report> where Self: Sized;
 
     ///
     fn collect(&self) -> Result<(), Report>;
 
     ///
-    fn tick(&self) -> Result<(), Report>;
-
-    fn pop<A: Agent>(&self) -> Result<Box<A>, Report>;
-
-    /// This method needs to return the full vector that holds all the agents.
-    fn len(&self) -> usize;
+    fn tick(&mut self) -> Result<(), Report>;
 }
 
