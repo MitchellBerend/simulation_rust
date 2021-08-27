@@ -1,8 +1,15 @@
 //! This module will hold all the main functions that should be called. The specific order is
 //! recommended but some functions depend on the build up or tear down of others.
 //!
+//! The following order order of operations is recommended:
+//! 
+//!     1. generate_env<Environment, Agent>(pop_size)
+//!     2. tick() (or tick_collect)
+//!     3. collect()
 //!
-//!
+//! The final collect call will write collect all the agent and environment data and write it to a
+//! file with the naming convention <pid>.json.
+
 
 
 use color_eyre::Report;
@@ -37,3 +44,4 @@ pub fn collect(environment: Box<dyn Environment>) -> Result<Box<dyn Environment>
     (*environment).collect()?;
     Ok(environment)
 }
+

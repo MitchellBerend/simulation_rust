@@ -17,7 +17,7 @@
 //! The process will look something like this:
 //! 
 //!
-//! /*                Environment
+//! /*                  Environment
 //!                         |
 //!                 --------------------
 //!                 |       |           |
@@ -54,7 +54,6 @@
 //!     -
 //!
 //! An Environment needs to have the following fields: 
-//!     - agent_type
 //!     - population
 
 
