@@ -6,7 +6,7 @@ use color_eyre::Report;
 
 
 struct TestAgent {
-    pub age: u8,
+    pub age: u64,
 }
 
 struct TestEnv {
@@ -57,8 +57,7 @@ impl Agent for TestAgent {
 #[test]
 fn test_tick() -> Result<(), Report> {
     let mut env = generate_env::<TestEnv, TestAgent>(10)?;
-    for year in 0..100 {
-        println!("Year: {}", year);
+    for _ in 0..100 {
         env = tick(env)?;
     }
     Ok(())
@@ -67,11 +66,17 @@ fn test_tick() -> Result<(), Report> {
 
 #[test]
 fn test_tick_collect_once() -> Result<(), Report> {
-    let mut env = generate_env::<TestEnv, TestAgent>(10)?;
-    for _() -> Result<(), Report> {
-    let mut env = generate_env::<TestEnv, TestAgent>(10)?;
+    let mut env = generate_env::<TestEnv, TestAgent>(1000)?;
     for _ in 0..100 {
-        env = tick_collect(env)?;
+        env = tick(env)?;
     }
+    collect(env)?;
+    Ok(())
+}
+
+
+#[test]
+fn test_multithread_tick_collect_once() -> Result<(), Report> {
+    generate_tick_collect::<TestEnv, TestAgent>(1000, 10000)?;
     Ok(())
 }
