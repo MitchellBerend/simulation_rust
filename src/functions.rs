@@ -11,6 +11,9 @@
 //! file with the naming convention <pid>.json.
 
 
+// TODO
+// Find a way to run multiple runs so the result pool gets big enough
+
 use std::thread;
 
 use color_eyre::Report;
@@ -47,20 +50,22 @@ pub fn collect(environment: Box<dyn Environment>) -> Result<Box<dyn Environment>
     Ok(environment)
 }
 
-pub fn generate_tick_collect<E: 'static + Environment, A: 'static + Agent>(pop_size: u64, ticks: u64) -> Result<(), Report> {
-    let mut v = vec!();
-    for _ in 0..100 {
-        v.push(thread::spawn(move || -> Result<(), Report> {
-            let mut env = generate_env::<E, A>(pop_size)?;
-            for _ in 0..ticks {
-                env = tick(env)?;
-            }
-            collect(env)?;
-            Ok(())
-        }));
-    }
-    for handle in v {
-        handle.join().unwrap().unwrap();
+pub fn generate_tick_collect<E: 'static + Environment, A: 'static + Agent>(pop_size: u64, ticks: u64, runs: u64) -> Result<(), Report> {
+    for _ in 0..(runs / 100) {
+        let mut v = vec!();
+        for _ in 0..100 {
+            v.push(thread::spawn(move || -> Result<(), Report> {
+                let mut env = generate_env::<E, A>(pop_size)?;
+                for _ in 0..ticks {
+                    env = tick(env)?;
+                }
+                collect(env)?;
+                Ok(())
+            }));
+        }
+        for handle in v {
+            handle.join().unwrap().unwrap();
+        }
     }
     Ok(())
 }
