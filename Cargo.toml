@@ -8,4 +8,4 @@ edition = "2018"
 
 [dependencies]
 color-eyre = "0.5"
-
+num_cpus = "1.13.0"
