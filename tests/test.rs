@@ -77,6 +77,6 @@ fn test_tick_collect_once() -> Result<(), Report> {
 
 #[test]
 fn test_multithread_tick_collect_once() -> Result<(), Report> {
-    generate_tick_collect::<TestEnv, TestAgent>(1000, 1000, 100)?;
+    generate_tick_collect::<TestEnv, TestAgent>(10000, 10000, 100)?;
     Ok(())
 }
