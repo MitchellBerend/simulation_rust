@@ -43,7 +43,6 @@ impl Agent for TestAgent {
     }
 
     fn collect(&self) -> Result<(), Report> {
-        //println!("age: {}", &self.age);
         Ok(())
     }
 

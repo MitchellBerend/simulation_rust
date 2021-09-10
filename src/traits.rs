@@ -11,8 +11,7 @@
 //! The point of the simulations is to add some form of random sequencing. This means there will
 //! need to be multiple runs of the simulation with the same input parameters. One simulation run 
 //! will be fully separate of another simulation run, making a multiprocess execution model a very 
-//! good candidate for speeding up the program. Once all runs are finished and writen to their own
-//! results file. A clean up function can collect and merge all the data into a single file.
+//! good candidate for speeding up the program. 
 //!
 //! The process will look something like this:
 //! 
