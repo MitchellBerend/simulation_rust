@@ -11,8 +11,6 @@
 
 use std::thread;
 
-use num_cpus;
-
 use crate::traits::{Environment, Agent};
 
 
