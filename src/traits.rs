@@ -56,29 +56,25 @@
 //!     - population
 
 
-use color_eyre::Report;
-
-
 pub trait Agent {
     ///
-    fn generate() -> Result<Box<Self>, Report> where Self: Sized;
+    fn generate() -> Result<Box<Self>, &'static str> where Self: Sized;
 
     ///
-    fn collect(&self) -> Result<(), Report>;
+    fn collect(&self) -> Result<(), &'static str>;
 
     ///
-    fn tick(&mut self) -> Result<(), Report>;
+    fn tick(&mut self) -> Result<(), &'static str>;
 }
 
 
 pub trait Environment {
     ///
-    fn generate(pop: Vec<Box<dyn Agent>>) -> Result<Box<Self>, Report> where Self: Sized;
+    fn generate(pop: Vec<Box<dyn Agent>>) -> Result<Box<Self>, &'static str> where Self: Sized;
 
     ///
-    fn collect(&self) -> Result<(), Report>;
+    fn collect(&self) -> Result<(), &'static str>;
 
     ///
-    fn tick(&mut self) -> Result<(), Report>;
+    fn tick(&mut self) -> Result<(), &'static str>;
 }
-
