@@ -27,6 +27,7 @@ pub fn generate_default_env<A: 'static + Agent>(pop_size: u64) -> Result<Box<dyn
     Ok(env)
 }
 
+
 /// Applies a tick to a passed in environment. This takes both
 /// the default environment provided by this library and custom
 /// defined environments created by the user.
@@ -56,6 +57,7 @@ pub fn collect(environment: Box<dyn Environment>) -> Result<Box<dyn Environment>
     Ok(environment)
 }
 
+
 /// Generates an environment and runs it the simulation in multiple
 /// processes. This also runs the generated simulation with the
 /// given parameters.
@@ -80,6 +82,7 @@ pub fn generate_default_tick_collect<A: 'static + Agent>(pop_size: u64, ticks: u
     Ok(())
 }
 
+
 /// Generates a custom environment specified agent. This environment
 /// is the standard implementation and does not provide any custom
 /// behavior.
@@ -92,6 +95,7 @@ pub fn generate_env<E:'static + Environment, A: 'static + Agent>(pop_size: u64) 
     let env: Box<E> = E::generate(pop)?;
     Ok(env)
 }
+
 
 /// Generates a custom environment and runs it the simulation in
 /// multiple processes. This also runs the generated simulation
