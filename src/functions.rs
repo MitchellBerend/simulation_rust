@@ -14,6 +14,9 @@ use std::thread;
 use crate::traits::{Environment, Agent, DefaultEnvironment};
 
 
+/// Generates a standard environment with a specified agent.
+/// This environment is the standard implementation and does
+///  not provide any custom behavior.
 pub fn generate_default_env<A: 'static + Agent>(pop_size: u64) -> Result<Box<dyn Environment>, &'static str> {
     let mut pop: Vec<Box<dyn Agent>> = vec!();
     for _ in 0..pop_size {
@@ -24,13 +27,20 @@ pub fn generate_default_env<A: 'static + Agent>(pop_size: u64) -> Result<Box<dyn
     Ok(env)
 }
 
-
+/// Applies a tick to a passed in environment. This takes both
+/// the default environment provided by this library and custom
+/// defined environments created by the user.
 pub fn tick(mut environment: Box<dyn Environment>) -> Result<Box<dyn Environment>, &'static str> {
     (*environment).tick()?;
     Ok(environment)
 }
 
 
+/// Applies a tick and a collent to a passed in environment. 
+/// This takes both the default environment provided by this
+/// library and custom defined environments created by the user.
+/// This function can be used when the user requies data from a
+/// certain time in a running simulation.
 pub fn tick_collect(mut environment: Box<dyn Environment>) -> Result<Box<dyn Environment>, &'static str> {
     (*environment).tick()?;
     (*environment).collect()?;
@@ -38,12 +48,17 @@ pub fn tick_collect(mut environment: Box<dyn Environment>) -> Result<Box<dyn Env
 }
 
 
+/// Applies a collect to a passed in environment. This takes both
+/// the default environment provided by this library and custom
+/// defined environments created by the user.
 pub fn collect(environment: Box<dyn Environment>) -> Result<Box<dyn Environment>, &'static str> {
     (*environment).collect()?;
     Ok(environment)
 }
 
-
+/// Generates an environment and runs it the simulation in multiple
+/// processes. This also runs the generated simulation with the
+/// given parameters.
 pub fn generate_default_tick_collect<A: 'static + Agent>(pop_size: u64, ticks: u64, runs: u64) -> Result<(), &'static str> {
     let cpu_count: u64 = num_cpus::get() as u64;
     for _ in 0..(runs / cpu_count + 1) {
@@ -65,7 +80,9 @@ pub fn generate_default_tick_collect<A: 'static + Agent>(pop_size: u64, ticks: u
     Ok(())
 }
 
-
+/// Generates a custom environment specified agent. This environment
+/// is the standard implementation and does not provide any custom
+/// behavior.
 pub fn generate_env<E:'static + Environment, A: 'static + Agent>(pop_size: u64) -> Result<Box<dyn Environment>, &'static str> {
     let mut pop: Vec<Box<dyn Agent>> = vec!();
     for _ in 0..pop_size {
@@ -76,7 +93,9 @@ pub fn generate_env<E:'static + Environment, A: 'static + Agent>(pop_size: u64) 
     Ok(env)
 }
 
-
+/// Generates a custom environment and runs it the simulation in
+/// multiple processes. This also runs the generated simulation
+/// with the given parameters.
 pub fn generate_tick_collect<E: 'static + Environment, A: 'static + Agent>(pop_size: u64, ticks: u64, runs: u64) -> Result<(), &'static str> {
     let cpu_count: u64 = num_cpus::get() as u64;
     for _ in 0..(runs / cpu_count + 1) {
