@@ -79,9 +79,11 @@ pub trait Environment {
     fn tick(&mut self) -> Result<(), &'static str>;
 }
 
+/// A default struct that is used in the default functions.
 pub struct DefaultEnvironment {
     population: Vec<Box<dyn Agent>>
 }
+
 
 impl Environment for DefaultEnvironment {
     fn generate(population: Vec<Box<dyn Agent>>) -> Result<Box<Self>, &'static str> {
