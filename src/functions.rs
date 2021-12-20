@@ -11,16 +11,16 @@
 
 use std::thread;
 
-use crate::traits::{Environment, Agent};
+use crate::traits::{Environment, Agent, DefaultEnvironment};
 
 
-pub fn generate_env<E: 'static + Environment, A: 'static + Agent>(pop_size: u64) -> Result<Box<dyn Environment>, &'static str> {
+pub fn generate_default_env<A: 'static + Agent>(pop_size: u64) -> Result<Box<dyn Environment>, &'static str> {
     let mut pop: Vec<Box<dyn Agent>> = vec!();
     for _ in 0..pop_size {
         let agent: Box<dyn Agent> = A::generate()?;
         pop.push(agent);
     }
-    let env: Box<E> = E::generate(pop)?;
+    let env: Box<DefaultEnvironment> = DefaultEnvironment::generate(pop)?;
     Ok(env)
 }
 
@@ -41,6 +41,39 @@ pub fn tick_collect(mut environment: Box<dyn Environment>) -> Result<Box<dyn Env
 pub fn collect(environment: Box<dyn Environment>) -> Result<Box<dyn Environment>, &'static str> {
     (*environment).collect()?;
     Ok(environment)
+}
+
+
+pub fn generate_default_tick_collect<A: 'static + Agent>(pop_size: u64, ticks: u64, runs: u64) -> Result<(), &'static str> {
+    let cpu_count: u64 = num_cpus::get() as u64;
+    for _ in 0..(runs / cpu_count + 1) {
+        let mut v = vec!();
+        for _ in 0..cpu_count {
+            v.push(thread::spawn(move || -> Result<(), &'static str> {
+                let mut env = generate_default_env::<A>(pop_size)?;
+                for _ in 0..ticks {
+                    env = tick(env)?;
+                }
+                collect(env)?;
+                Ok(())
+            }));
+        }
+        for handle in v {
+            handle.join().unwrap().unwrap();
+        }
+    }
+    Ok(())
+}
+
+
+pub fn generate_env<E:'static + Environment, A: 'static + Agent>(pop_size: u64) -> Result<Box<dyn Environment>, &'static str> {
+    let mut pop: Vec<Box<dyn Agent>> = vec!();
+    for _ in 0..pop_size {
+        let agent: Box<dyn Agent> = A::generate()?;
+        pop.push(agent);
+    }
+    let env: Box<E> = E::generate(pop)?;
+    Ok(env)
 }
 
 

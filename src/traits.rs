@@ -78,3 +78,31 @@ pub trait Environment {
     ///
     fn tick(&mut self) -> Result<(), &'static str>;
 }
+
+pub struct DefaultEnvironment {
+    population: Vec<Box<dyn Agent>>
+}
+
+impl Environment for DefaultEnvironment {
+    fn generate(population: Vec<Box<dyn Agent>>) -> Result<Box<Self>, &'static str> {
+        Ok(Box::new(Self {population}))
+    }
+
+    fn collect(&self) -> Result<(), &'static str> {
+        for agent in &self.population {
+            (*agent).collect()?;
+        }
+        Ok(())
+    }
+
+    fn tick(&mut self) -> Result<(), &'static str> {
+        let mut pop: Vec<Box<dyn Agent>> = vec!();
+        for _ in 0..self.population.len() {
+            let mut agent: Box<dyn Agent> = self.population.pop().unwrap();
+            agent.tick()?;
+            pop.push(agent);
+        }
+        self.population = pop;
+        Ok(())
+    }
+}
