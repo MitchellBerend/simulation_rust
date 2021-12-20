@@ -2,7 +2,7 @@
 name = "sim-rust"
 version = "0.2.1"
 description = "A simulation framework (WIP)"
-authors = ["Mitchell Berendhuysen <mitchellbhuysen@hotmail.com>"]
+authors = ["Mitchell Berendhuysen"]
 edition = "2018"
 license = "LGPL-3.0-or-later"
 
