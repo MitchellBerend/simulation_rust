@@ -45,7 +45,7 @@
 
 use std::thread;
 
-use crate::traits::{Environment, Agent, DefaultEnvironment};
+use crate::traits::{Environment, Agent};
 
 
 /// Generates a standard environment with a specified agent.
@@ -153,4 +153,35 @@ pub fn generate_tick_collect<E: 'static + Environment, A: 'static + Agent>(pop_s
         }
     }
     Ok(())
+}
+
+
+/// A default struct that is used in the default functions.
+struct DefaultEnvironment {
+    population: Vec<Box<dyn Agent>>
+}
+
+
+impl Environment for DefaultEnvironment {
+    fn generate(population: Vec<Box<dyn Agent>>) -> Result<Box<Self>, &'static str> {
+        Ok(Box::new(Self {population}))
+    }
+
+    fn collect(&self) -> Result<(), &'static str> {
+        for agent in &self.population {
+            (*agent).collect()?;
+        }
+        Ok(())
+    }
+
+    fn tick(&mut self) -> Result<(), &'static str> {
+        let mut pop: Vec<Box<dyn Agent>> = vec!();
+        for _ in 0..self.population.len() {
+            let mut agent: Box<dyn Agent> = self.population.pop().unwrap();
+            agent.tick()?;
+            pop.push(agent);
+        }
+        self.population = pop;
+        Ok(())
+    }
 }
