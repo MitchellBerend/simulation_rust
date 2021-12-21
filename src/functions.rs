@@ -2,11 +2,45 @@
 //! recommended but some functions depend on the build up or tear down of others.
 //!
 //! The following order order of operations is recommended:
-//!/* 
-//!     1. generate_env<Environment, Agent>(pop_size)
-//!     2. tick() (or tick_collect)
-//!     3. collect()
-//!*/
+//!
+//!  # Example
+//! ``` 
+//! use sim_rust::Agent;
+//! use sim_rust::functions::*;
+//!
+//! //method 1 and 2 have the exact same outcome 
+//! 
+//! //method 1  
+//! let mut env_1 = generate_default_env::<ExampleAgent>(10).unwrap();
+//! env_1 = tick(env_1).unwrap(); //(or tick_collect)
+//! collect(env_1);
+//!
+//! //method 2
+//! let mut env_2 = generate_default_tick_collect::<ExampleAgent>(10, 1, 1).unwrap();
+//! 
+//! 
+//!  
+//! // This is just a very simple implementation of an agent. 
+//! struct ExampleAgent {
+//!     age: u8,
+//! }
+//! 
+//! impl Agent for ExampleAgent {
+//!     fn generate() -> Result<Box<Self> ,&'static str> {
+//!         let agent = Box::new(Self {age: 1});
+//!         Ok(agent)
+//!     }
+//! 
+//!     fn tick(&mut self) -> Result<(), &'static str> {
+//!         self.age += 1;
+//!         Ok(())
+//!     }
+//!
+//!     fn collect(&self)  -> Result<(), &'static str> {
+//!         Ok(())
+//!     }
+//! }
+//!```
 
 
 use std::thread;
