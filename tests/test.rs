@@ -26,6 +26,14 @@ impl Agent for TestAgent {
 #[test]
 fn test_tick() -> Result<(), &'static str> {
     let mut env = generate_default_env::<TestAgent>(10)?;
+    let new_agent = TestAgent::generate()?;
+    env.add_agent(new_agent)?;
+    let new_agents: Vec<Box<dyn Agent>> = vec![
+        TestAgent::generate()?,
+        TestAgent::generate()?,
+        TestAgent::generate()?
+    ];
+    env.add_agents(new_agents)?;
     for _ in 0..100 {
         env = tick(env)?;
     }
@@ -36,6 +44,14 @@ fn test_tick() -> Result<(), &'static str> {
 #[test]
 fn test_tick_collect_once() -> Result<(), &'static str> {
     let mut env = generate_default_env::<TestAgent>(1000)?;
+    let new_agent = TestAgent::generate()?;
+    env.add_agent(new_agent)?;
+    let new_agents: Vec<Box<dyn Agent>> = vec![
+        TestAgent::generate()?,
+        TestAgent::generate()?,
+        TestAgent::generate()?
+    ];
+    env.add_agents(new_agents)?;
     for _ in 0..100 {
         env = tick(env)?;
     }

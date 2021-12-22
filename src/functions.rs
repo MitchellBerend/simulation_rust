@@ -184,4 +184,16 @@ impl Environment for DefaultEnvironment {
         self.population = pop;
         Ok(())
     }
+
+    fn add_agent(&mut self, agent: Box<dyn Agent>) -> Result<(), &'static str> {
+        self.population.push(agent);
+        Ok(())
+    }
+
+    fn add_agents(&mut self, agents: Vec<Box<dyn Agent>>) -> Result<() , &'static str> {
+        for agent in agents {
+            self.population.push(agent);
+        }
+        Ok(())
+    }
 }
