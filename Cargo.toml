@@ -1,6 +1,6 @@
 [package]
 name = "sim-rust"
-version = "0.4.1"
+version = "0.4.2"
 description = "A simulation framework (WIP)"
 authors = ["Mitchell Berendhuysen"]
 edition = "2021"
