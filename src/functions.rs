@@ -87,9 +87,7 @@ use crate::traits::{Agent, Environment};
 /// Generates a standard environment with a specified agent.
 /// This environment is the standard implementation and does
 ///  not provide any custom behavior.
-pub fn generate_default_env<A: 'static + Agent>(
-    pop_size: u64,
-) -> Result<Box<dyn Environment>, &'static str> {
+pub fn generate_default_env<A: 'static + Agent>(pop_size: u64) -> Result<Box<dyn Environment>, &'static str> {
     let mut pop: Vec<Box<dyn Agent>> = vec![];
     for _ in 0..pop_size {
         let agent: Box<dyn Agent> = A::generate()?;
@@ -129,11 +127,7 @@ pub fn collect(environment: &Box<dyn Environment>) -> Result<(), &'static str> {
 /// Generates an environment and runs it the simulation in multiple
 /// processes. This also runs the generated simulation with the
 /// given parameters.
-pub fn generate_default_tick_collect<A: 'static + Agent>(
-    pop_size: u64,
-    ticks: u64,
-    runs: u64,
-) -> Result<(), &'static str> {
+pub fn generate_default_tick_collect<A: 'static + Agent>(pop_size: u64, ticks: u64, runs: u64) -> Result<(), &'static str> {
     let cpu_count: u64 = num_cpus::get() as u64;
     for _ in 0..(runs / cpu_count + 1) {
         let mut v = vec![];
@@ -157,9 +151,7 @@ pub fn generate_default_tick_collect<A: 'static + Agent>(
 /// Generates a custom environment specified agent. This environment
 /// is the standard implementation and does not provide any custom
 /// behavior.
-pub fn generate_env<E: 'static + Environment, A: 'static + Agent>(
-    pop_size: u64,
-) -> Result<Box<dyn Environment>, &'static str> {
+pub fn generate_env<E: 'static + Environment, A: 'static + Agent>(pop_size: u64) -> Result<Box<dyn Environment>, &'static str> {
     let mut pop: Vec<Box<dyn Agent>> = vec![];
     for _ in 0..pop_size {
         let agent: Box<dyn Agent> = A::generate()?;
@@ -172,11 +164,7 @@ pub fn generate_env<E: 'static + Environment, A: 'static + Agent>(
 /// Generates a custom environment and runs it the simulation in
 /// multiple processes. This also runs the generated simulation
 /// with the given parameters.
-pub fn generate_tick_collect<E: 'static + Environment, A: 'static + Agent>(
-    pop_size: u64,
-    ticks: u64,
-    runs: u64,
-) -> Result<(), &'static str> {
+pub fn generate_tick_collect<E: 'static + Environment, A: 'static + Agent>(pop_size: u64, ticks: u64, runs: u64) -> Result<(), &'static str> {
     let cpu_count: u64 = num_cpus::get() as u64;
     for _ in 0..(runs / cpu_count + 1) {
         let mut v = vec![];
