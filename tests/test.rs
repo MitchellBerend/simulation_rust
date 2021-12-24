@@ -35,7 +35,7 @@ fn test_tick() -> Result<(), &'static str> {
     ];
     env.add_agents(new_agents)?;
     for _ in 0..100 {
-        env = tick(env)?;
+        tick(&mut env)?;
     }
     Ok(())
 }
@@ -53,9 +53,9 @@ fn test_tick_collect_once() -> Result<(), &'static str> {
     ];
     env.add_agents(new_agents)?;
     for _ in 0..100 {
-        env = tick(env)?;
+        tick(&mut env)?;
     }
-    collect(env)?;
+    collect(&env)?;
     Ok(())
 }
 
