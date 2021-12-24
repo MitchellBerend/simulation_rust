@@ -105,7 +105,6 @@ pub fn generate_default_env<A: 'static + Agent>(pop_size: u64) -> Result<Box<dyn
 /// defined environments created by the user.
 pub fn tick(environment: &mut Box<dyn Environment>) -> Result<(), &'static str> {
     (*environment).tick()?;
-    // Ok(environment)
     Ok(())
 }
 
@@ -118,7 +117,6 @@ pub fn tick(environment: &mut Box<dyn Environment>) -> Result<(), &'static str> 
 pub fn tick_collect(environment: &mut Box<dyn Environment>) -> Result<(), &'static str> {
     (*environment).tick()?;
     (*environment).collect()?;
-    // Ok(environment)
     Ok(())
 }
 
@@ -128,7 +126,6 @@ pub fn tick_collect(environment: &mut Box<dyn Environment>) -> Result<(), &'stat
 /// defined environments created by the user.
 pub fn collect(environment: &Box<dyn Environment>) -> Result<(), &'static str> {
     (*environment).collect()?;
-    // Ok(environment)
     Ok(())
 }
 
