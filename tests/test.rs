@@ -1,11 +1,9 @@
-use sim_rust::Agent;
 use sim_rust::functions::*;
-
+use sim_rust::Agent;
 
 struct TestAgent {
     pub age: u64,
 }
-
 
 impl Agent for TestAgent {
     fn generate() -> Result<Box<Self>, &'static str> {
@@ -22,7 +20,6 @@ impl Agent for TestAgent {
     }
 }
 
-
 #[test]
 fn test_tick() -> Result<(), &'static str> {
     let mut env = generate_default_env::<TestAgent>(10)?;
@@ -31,7 +28,7 @@ fn test_tick() -> Result<(), &'static str> {
     let new_agents: Vec<Box<dyn Agent>> = vec![
         TestAgent::generate()?,
         TestAgent::generate()?,
-        TestAgent::generate()?
+        TestAgent::generate()?,
     ];
     env.add_agents(new_agents)?;
     for _ in 0..100 {
@@ -39,7 +36,6 @@ fn test_tick() -> Result<(), &'static str> {
     }
     Ok(())
 }
-
 
 #[test]
 fn test_tick_collect_once() -> Result<(), &'static str> {
@@ -49,7 +45,7 @@ fn test_tick_collect_once() -> Result<(), &'static str> {
     let new_agents: Vec<Box<dyn Agent>> = vec![
         TestAgent::generate()?,
         TestAgent::generate()?,
-        TestAgent::generate()?
+        TestAgent::generate()?,
     ];
     env.add_agents(new_agents)?;
     for _ in 0..100 {
@@ -58,7 +54,6 @@ fn test_tick_collect_once() -> Result<(), &'static str> {
     collect(&env)?;
     Ok(())
 }
-
 
 #[test]
 fn test_multithread_tick_collect_once() -> Result<(), &'static str> {

@@ -1,6 +1,6 @@
-//! This module holds all the traits that have to be implemented for 
+//! This module holds all the traits that have to be implemented for
 //! the agent to be a plugable compontent.
-//! 
+//!
 //! The following mental model is used to the api design.
 //!
 //! There will be constructor functions that construct and run the simulation automatically. These
@@ -9,12 +9,12 @@
 //! with only a single agent type.
 //!
 //! The point of the simulations is to add some form of random sequencing. This means there will
-//! need to be multiple runs of the simulation with the same input parameters. One simulation run 
-//! will be fully separate of another simulation run, making a multiprocess execution model a very 
-//! good candidate for speeding up the program. 
+//! need to be multiple runs of the simulation with the same input parameters. One simulation run
+//! will be fully separate of another simulation run, making a multiprocess execution model a very
+//! good candidate for speeding up the program.
 //!
 //! The process will look something like this:
-//! 
+//!
 //!
 //! /*                  Environment
 //!                         |
@@ -50,10 +50,11 @@
 //!                                 Agent_3.collect() ]
 //! */
 
-
 pub trait Agent {
     ///
-    fn generate() -> Result<Box<Self>, &'static str> where Self: Sized;
+    fn generate() -> Result<Box<Self>, &'static str>
+    where
+        Self: Sized;
 
     ///
     fn collect(&self) -> Result<(), &'static str>;
@@ -62,10 +63,11 @@ pub trait Agent {
     fn tick(&mut self) -> Result<(), &'static str>;
 }
 
-
 pub trait Environment {
     ///
-    fn generate(pop: Vec<Box<dyn Agent>>) -> Result<Box<Self>, &'static str> where Self: Sized;
+    fn generate(pop: Vec<Box<dyn Agent>>) -> Result<Box<Self>, &'static str>
+    where
+        Self: Sized;
 
     ///
     fn collect(&self) -> Result<(), &'static str>;
@@ -77,5 +79,5 @@ pub trait Environment {
     fn add_agent(&mut self, agent: Box<dyn Agent>) -> Result<(), &'static str>;
 
     //
-    fn add_agents(&mut self, agents: Vec<Box<dyn Agent>>) -> Result<() , &'static str>;
+    fn add_agents(&mut self, agents: Vec<Box<dyn Agent>>) -> Result<(), &'static str>;
 }
