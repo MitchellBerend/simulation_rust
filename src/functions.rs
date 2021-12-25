@@ -13,7 +13,7 @@
 //! // method 1  
 //! let mut env_1 = generate_default_env::<ExampleAgent1>(10).unwrap();
 //! tick(&mut env_1).unwrap(); //(or tick_collect)
-//! collect(&env_1);
+//! collect(env_1);
 //!
 //!
 //! // method 2
@@ -33,7 +33,7 @@
 //! ];
 //! env_3.add_agents(example_agents).unwrap();
 //! tick(&mut env_3).unwrap();
-//! collect(&env_3);
+//! collect(env_3);
 //!
 //!   
 //! // This is just a very simple implementation of an agent.
@@ -119,7 +119,7 @@ pub fn tick_collect(environment: &mut Box<dyn Environment>) -> Result<(), &'stat
 /// Applies a collect to a passed in environment. This takes both
 /// the default environment provided by this library and custom
 /// defined environments created by the user.
-pub fn collect(environment: &Box<dyn Environment>) -> Result<(), &'static str> {
+pub fn collect(environment: Box<dyn Environment>) -> Result<(), &'static str> {
     (*environment).collect()?;
     Ok(())
 }
@@ -137,7 +137,7 @@ pub fn generate_default_tick_collect<A: 'static + Agent>(pop_size: u64, ticks: u
                 for _ in 0..ticks {
                     tick(&mut env)?;
                 }
-                collect(&env)?;
+                collect(env)?;
                 Ok(())
             }));
         }
@@ -174,7 +174,7 @@ pub fn generate_tick_collect<E: 'static + Environment, A: 'static + Agent>(pop_s
                 for _ in 0..ticks {
                     tick(&mut env)?;
                 }
-                collect(&env)?;
+                collect(env)?;
                 Ok(())
             }));
         }

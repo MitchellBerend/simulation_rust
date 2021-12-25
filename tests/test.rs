@@ -51,7 +51,7 @@ fn test_tick_collect_once() -> Result<(), &'static str> {
     for _ in 0..100 {
         tick(&mut env)?;
     }
-    collect(&env)?;
+    collect(env)?;
     Ok(())
 }
 
