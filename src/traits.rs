@@ -37,9 +37,6 @@
 //!                                 Agent_3.tick() ]
 //! */
 //!
-//! Once that round is completely finished the environment will collect all the public data and
-//! write it to a file in json format.
-//!
 //!
 //! /*                  Environment.collect()
 //!                         |
