@@ -60,6 +60,10 @@
 //!     fn collect(&self)  -> Result<(), &'static str> {
 //!         Ok(())
 //!     }
+//! 
+//!     fn clean(&self) -> Result<(), &'static str> {
+//!         Ok(())
+//!     }
 //! }
 //!
 //! // This is a direct copy of the implementation of ExampleAgent1
@@ -75,6 +79,10 @@
 //!     }
 //!
 //!     fn collect(&self)  -> Result<(), &'static str> {
+//!         Ok(())
+//!     }
+//!
+//!     fn clean(&self) -> Result<(), &'static str> {
 //!         Ok(())
 //!     }
 //! }
@@ -101,7 +109,7 @@ pub fn generate_default_env<A: 'static + Agent>(pop_size: u64) -> Result<Box<dyn
 /// the default environment provided by this library and custom
 /// defined environments created by the user.
 pub fn tick(environment: &mut Box<dyn Environment>) -> Result<(), &'static str> {
-    (*environment).tick()?;
+    environment.tick()?;
     Ok(())
 }
 
@@ -111,8 +119,13 @@ pub fn tick(environment: &mut Box<dyn Environment>) -> Result<(), &'static str> 
 /// This function can be used when the user requies data from a
 /// certain time in a running simulation.
 pub fn tick_collect(environment: &mut Box<dyn Environment>) -> Result<(), &'static str> {
-    (*environment).tick()?;
-    (*environment).collect()?;
+    environment.tick()?;
+    environment.collect()?;
+    Ok(())
+}
+
+pub fn clean(environment: &mut Box<dyn Environment>) -> Result<(), &'static str> {
+    environment.clean()?;
     Ok(())
 }
 
@@ -120,7 +133,7 @@ pub fn tick_collect(environment: &mut Box<dyn Environment>) -> Result<(), &'stat
 /// the default environment provided by this library and custom
 /// defined environments created by the user.
 pub fn collect(environment: Box<dyn Environment>) -> Result<(), &'static str> {
-    (*environment).collect()?;
+    environment.collect()?;
     Ok(())
 }
 
@@ -197,7 +210,7 @@ impl Environment for DefaultEnvironment {
 
     fn collect(&self) -> Result<(), &'static str> {
         for agent in &self.population {
-            (*agent).collect()?;
+            agent.collect()?;
         }
         Ok(())
     }
@@ -210,6 +223,13 @@ impl Environment for DefaultEnvironment {
             pop.push(agent);
         }
         self.population = pop;
+        Ok(())
+    }
+
+    fn clean(&self) -> Result<(), &'static str> {
+        for agent in &self.population {
+            agent.to_owned().clean()?;
+        }
         Ok(())
     }
 

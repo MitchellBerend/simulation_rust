@@ -61,6 +61,9 @@ pub trait Agent {
 
     ///
     fn tick(&mut self) -> Result<(), &'static str>;
+
+    //
+    fn clean(&self) -> Result<(), &'static str>;
 }
 
 pub trait Environment {
@@ -74,6 +77,9 @@ pub trait Environment {
 
     ///
     fn tick(&mut self) -> Result<(), &'static str>;
+
+    //
+    fn clean(&self) -> Result<(), &'static str>;
 
     //
     fn add_agent(&mut self, agent: Box<dyn Agent>) -> Result<(), &'static str>;
