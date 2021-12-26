@@ -18,18 +18,8 @@ impl Agent for TestAgent {
         self.age += 1;
         Ok(())
     }
-
-    fn clean(&self) -> Result<(), &'static str> {
-        drop(self);
-        Ok(())
-    }
 }
 
-impl Drop for TestAgent {
-    fn drop(&mut self) {
-        println!("Dropping agent")
-    }
-}
 
 #[test]
 fn test_tick() -> Result<(), &'static str> {

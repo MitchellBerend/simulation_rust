@@ -60,10 +60,6 @@
 //!     fn collect(&self)  -> Result<(), &'static str> {
 //!         Ok(())
 //!     }
-//! 
-//!     fn clean(&self) -> Result<(), &'static str> {
-//!         Ok(())
-//!     }
 //! }
 //!
 //! // This is a direct copy of the implementation of ExampleAgent1
@@ -79,10 +75,6 @@
 //!     }
 //!
 //!     fn collect(&self)  -> Result<(), &'static str> {
-//!         Ok(())
-//!     }
-//!
-//!     fn clean(&self) -> Result<(), &'static str> {
 //!         Ok(())
 //!     }
 //! }
@@ -121,11 +113,6 @@ pub fn tick(environment: &mut Box<dyn Environment>) -> Result<(), &'static str> 
 pub fn tick_collect(environment: &mut Box<dyn Environment>) -> Result<(), &'static str> {
     environment.tick()?;
     environment.collect()?;
-    Ok(())
-}
-
-pub fn clean(environment: &mut Box<dyn Environment>) -> Result<(), &'static str> {
-    environment.clean()?;
     Ok(())
 }
 
@@ -223,13 +210,6 @@ impl Environment for DefaultEnvironment {
             pop.push(agent);
         }
         self.population = pop;
-        Ok(())
-    }
-
-    fn clean(&self) -> Result<(), &'static str> {
-        for agent in &self.population {
-            agent.to_owned().clean()?;
-        }
         Ok(())
     }
 
