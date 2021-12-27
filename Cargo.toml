@@ -1,6 +1,6 @@
 [package]
 name = "sim-rust"
-version = "0.8.2"
+version = "0.8.3"
 description = "A simulation framework (WIP)"
 authors = ["Mitchell Berendhuysen"]
 edition = "2021"
@@ -11,4 +11,3 @@ repository = "https://github.com/MitchellBerend/simulation_rust"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-num_cpus = "1.13.0"
