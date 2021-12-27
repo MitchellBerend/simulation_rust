@@ -138,22 +138,19 @@ pub fn generate_default_tick_collect<A>(pop_size: u64, ticks: u64, runs: u64) ->
 where
     A: 'static + Agent,
 {
-    let cpu_count: u64 = num_cpus::get() as u64;
-    for _ in 0..(runs / cpu_count + 1) {
-        let mut v = vec![];
-        for _ in 0..cpu_count {
-            v.push(thread::spawn(move || -> Result<(), &'static str> {
-                let mut env: Box<dyn Environment> = generate_default_env::<A>(pop_size)?;
-                for _ in 0..ticks {
-                    tick(&mut env)?;
-                }
-                collect(env)?;
-                Ok(())
-            }));
-        }
-        for handle in v {
-            handle.join().unwrap().unwrap();
-        }
+    let mut v = vec![];
+    for _ in 0..runs{
+        v.push(thread::spawn(move || -> Result<(), &'static str> {
+            let mut env: Box<dyn Environment> = generate_default_env::<A>(pop_size)?;
+            for _ in 0..ticks {
+                tick(&mut env)?;
+            }
+            collect(env)?;
+            Ok(())
+        }));
+    }
+    for handle in v {
+        handle.join().unwrap().unwrap();
     }
     Ok(())
 }
@@ -183,22 +180,19 @@ where
     E: 'static + Environment,
     A: 'static + Agent,
 {
-    let cpu_count: u64 = num_cpus::get() as u64;
-    for _ in 0..(runs / cpu_count + 1) {
-        let mut v = vec![];
-        for _ in 0..cpu_count {
-            v.push(thread::spawn(move || -> Result<(), &'static str> {
-                let mut env: Box<dyn Environment> = generate_env::<E, A>(pop_size)?;
-                for _ in 0..ticks {
-                    tick(&mut env)?;
-                }
-                collect(env)?;
-                Ok(())
-            }));
-        }
-        for handle in v {
-            handle.join().unwrap().unwrap();
-        }
+    let mut v = vec![];
+    for _ in 0..runs {
+        v.push(thread::spawn(move || -> Result<(), &'static str> {
+            let mut env: Box<dyn Environment> = generate_env::<E, A>(pop_size)?;
+            for _ in 0..ticks {
+                tick(&mut env)?;
+            }
+            collect(env)?;
+            Ok(())
+        }));
+    }
+    for handle in v {
+        handle.join().unwrap().unwrap();
     }
     Ok(())
 }
