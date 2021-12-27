@@ -84,10 +84,17 @@ use std::thread;
 
 use crate::traits::{Agent, Environment};
 
+pub type EnvResult = Result<Box<dyn Environment>, &'static str>;
+pub type VoidResult = Result<(), &'static str>;
+
+
 /// Generates a standard environment with a specified agent.
 /// This environment is the standard implementation and does
 ///  not provide any custom behavior.
-pub fn generate_default_env<A: 'static + Agent>(pop_size: u64) -> Result<Box<dyn Environment>, &'static str> {
+pub fn generate_default_env<A>(pop_size: u64) -> EnvResult
+where
+    A: 'static + Agent,
+{
     let mut pop: Vec<Box<dyn Agent>> = vec![];
     for _ in 0..pop_size {
         let agent: Box<dyn Agent> = A::generate()?;
@@ -100,7 +107,7 @@ pub fn generate_default_env<A: 'static + Agent>(pop_size: u64) -> Result<Box<dyn
 /// Applies a tick to a passed in environment. This takes both
 /// the default environment provided by this library and custom
 /// defined environments created by the user.
-pub fn tick(environment: &mut Box<dyn Environment>) -> Result<(), &'static str> {
+pub fn tick(environment: &mut Box<dyn Environment>) -> VoidResult {
     environment.tick()?;
     Ok(())
 }
@@ -110,7 +117,7 @@ pub fn tick(environment: &mut Box<dyn Environment>) -> Result<(), &'static str> 
 /// library and custom defined environments created by the user.
 /// This function can be used when the user requies data from a
 /// certain time in a running simulation.
-pub fn tick_collect(environment: &mut Box<dyn Environment>) -> Result<(), &'static str> {
+pub fn tick_collect(environment: &mut Box<dyn Environment>) -> VoidResult {
     environment.tick()?;
     environment.collect()?;
     Ok(())
@@ -119,7 +126,7 @@ pub fn tick_collect(environment: &mut Box<dyn Environment>) -> Result<(), &'stat
 /// Applies a collect to a passed in environment. This takes both
 /// the default environment provided by this library and custom
 /// defined environments created by the user.
-pub fn collect(environment: Box<dyn Environment>) -> Result<(), &'static str> {
+pub fn collect(environment: Box<dyn Environment>) -> VoidResult {
     environment.collect()?;
     Ok(())
 }
@@ -127,7 +134,10 @@ pub fn collect(environment: Box<dyn Environment>) -> Result<(), &'static str> {
 /// Generates an environment and runs it the simulation in multiple
 /// processes. This also runs the generated simulation with the
 /// given parameters.
-pub fn generate_default_tick_collect<A: 'static + Agent>(pop_size: u64, ticks: u64, runs: u64) -> Result<(), &'static str> {
+pub fn generate_default_tick_collect<A>(pop_size: u64, ticks: u64, runs: u64) -> VoidResult
+where
+    A: 'static + Agent,
+{
     let cpu_count: u64 = num_cpus::get() as u64;
     for _ in 0..(runs / cpu_count + 1) {
         let mut v = vec![];
@@ -151,7 +161,11 @@ pub fn generate_default_tick_collect<A: 'static + Agent>(pop_size: u64, ticks: u
 /// Generates a custom environment specified agent. This environment
 /// is the standard implementation and does not provide any custom
 /// behavior.
-pub fn generate_env<E: 'static + Environment, A: 'static + Agent>(pop_size: u64) -> Result<Box<dyn Environment>, &'static str> {
+pub fn generate_env<E, A>(pop_size: u64) -> EnvResult
+where
+    E: 'static + Environment,
+    A: 'static + Agent,
+{
     let mut pop: Vec<Box<dyn Agent>> = vec![];
     for _ in 0..pop_size {
         let agent: Box<dyn Agent> = A::generate()?;
@@ -164,7 +178,11 @@ pub fn generate_env<E: 'static + Environment, A: 'static + Agent>(pop_size: u64)
 /// Generates a custom environment and runs it the simulation in
 /// multiple processes. This also runs the generated simulation
 /// with the given parameters.
-pub fn generate_tick_collect<E: 'static + Environment, A: 'static + Agent>(pop_size: u64, ticks: u64, runs: u64) -> Result<(), &'static str> {
+pub fn generate_tick_collect<E, A>(pop_size: u64, ticks: u64, runs: u64) -> VoidResult
+where
+    E: 'static + Environment,
+    A: 'static + Agent,
+{
     let cpu_count: u64 = num_cpus::get() as u64;
     for _ in 0..(runs / cpu_count + 1) {
         let mut v = vec![];
@@ -195,14 +213,14 @@ impl Environment for DefaultEnvironment {
         Ok(Box::new(Self { population }))
     }
 
-    fn collect(&self) -> Result<(), &'static str> {
+    fn collect(&self) -> VoidResult {
         for agent in &self.population {
             agent.collect()?;
         }
         Ok(())
     }
 
-    fn tick(&mut self) -> Result<(), &'static str> {
+    fn tick(&mut self) -> VoidResult {
         let mut pop: Vec<Box<dyn Agent>> = vec![];
         for _ in 0..self.population.len() {
             let mut agent: Box<dyn Agent> = self.population.pop().unwrap();
@@ -213,12 +231,12 @@ impl Environment for DefaultEnvironment {
         Ok(())
     }
 
-    fn add_agent(&mut self, agent: Box<dyn Agent>) -> Result<(), &'static str> {
+    fn add_agent(&mut self, agent: Box<dyn Agent>) -> VoidResult {
         self.population.push(agent);
         Ok(())
     }
 
-    fn add_agents(&mut self, agents: Vec<Box<dyn Agent>>) -> Result<(), &'static str> {
+    fn add_agents(&mut self, agents: Vec<Box<dyn Agent>>) -> VoidResult {
         for agent in agents {
             self.population.push(agent);
         }

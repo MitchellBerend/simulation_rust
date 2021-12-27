@@ -20,7 +20,6 @@ impl Agent for TestAgent {
     }
 }
 
-
 #[test]
 fn test_tick() -> Result<(), &'static str> {
     let mut env = generate_default_env::<TestAgent>(10)?;
