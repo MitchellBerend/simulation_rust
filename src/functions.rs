@@ -217,9 +217,11 @@ impl Environment for DefaultEnvironment {
     fn tick(&mut self) -> VoidResult {
         let mut pop: Vec<Box<dyn Agent>> = vec![];
         for _ in 0..self.population.len() {
-            let mut agent: Box<dyn Agent> = self.population.pop().unwrap();
-            agent.tick()?;
-            pop.push(agent);
+            let agent: Option<Box<dyn Agent>> = self.population.pop();
+            if let Some(mut agent) = agent {
+                agent.tick()?;
+                pop.push(agent);
+            };
         }
         self.population = pop;
         Ok(())
