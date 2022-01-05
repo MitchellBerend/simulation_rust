@@ -1,0 +1,4 @@
+name = "AAPL"
+price = 1023.01
+mean = 1.0002331028
+std_dev = 0.001
