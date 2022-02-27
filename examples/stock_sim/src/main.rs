@@ -4,7 +4,7 @@ use sim_rust::{Environment, Agent};
 mod agent;
 use agent::Stock;
 
-fn main() -> Result<(), &'static str> {
+fn main() -> Result<(), Box<dyn std::error::Error>> {
     let mut env: Box<dyn Environment> = sim::generate_default_env::<Stock>(0)?;
     let agents: Vec<Box<dyn Agent>> = vec![
         Stock::new("examples/stock_sim/config/aapl.toml")?,

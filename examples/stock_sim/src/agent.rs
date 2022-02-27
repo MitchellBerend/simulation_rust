@@ -1,3 +1,4 @@
+use config::{File, FileFormat};
 use serde::{Deserialize, Serialize};
 use sim_rust::Agent;
 
@@ -12,16 +13,11 @@ pub struct Stock {
 }
 
 impl Stock {
-    pub fn new(path: &str) -> Result<Box<Self>, &'static str> {
-        let mut config = config::Config::default();
-        if let Err(_) = config.merge(config::File::with_name(path)) {
-            panic!("Error while trying to load {}", path);
-        }
-        let conf  = match config.try_into::<Stock>() {
-            Ok(conf) => Box::new(conf),
-            Err(_) => panic!("Could not build Stock instance for {}", path),
-        };
-        Ok(conf)
+    pub fn new(path: &str) -> Result<Box<Self>, Box<dyn std::error::Error>> {
+        let config: Stock = config::Config::builder()
+            .add_source(File::new(path, FileFormat::Toml))
+            .build()?.try_deserialize::<Stock>()?;
+        Ok(Box::new(config))
     }
 }
 
