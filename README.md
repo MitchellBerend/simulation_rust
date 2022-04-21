@@ -1,3 +1,5 @@
+[![Rust](https://github.com/MitchellBerend/simulation_rust/actions/workflows/rust.yml/badge.svg?branch=master&event=push)](https://github.com/MitchellBerend/simulation_rust/actions/workflows/rust.yml)
+
 - [Intro](#intro)
 - [Tests](#tests)
 
