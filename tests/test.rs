@@ -10,8 +10,8 @@ impl Agent for TestAgent {
         Ok(Box::new(TestAgent { age: 0 }))
     }
 
-    fn collect(&self) -> Result<(), &'static str> {
-        Ok(())
+    fn collect(&self) -> Result<String, &'static str> {
+        Ok("".into())
     }
 
     fn tick(&mut self) -> Result<(), &'static str> {

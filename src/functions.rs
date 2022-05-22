@@ -57,8 +57,8 @@
 //!         Ok(())
 //!     }
 //!
-//!     fn collect(&self)  -> Result<(), &'static str> {
-//!         Ok(())
+//!     fn collect(&self)  -> Result<String, &'static str> {
+//!         Ok("".into())
 //!     }
 //! }
 //!
@@ -74,8 +74,8 @@
 //!         Ok(())
 //!     }
 //!
-//!     fn collect(&self)  -> Result<(), &'static str> {
-//!         Ok(())
+//!     fn collect(&self)  -> Result<String, &'static str> {
+//!         Ok("".into())
 //!     }
 //! }
 //!```
