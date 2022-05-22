@@ -54,7 +54,7 @@ pub trait Agent {
         Self: Sized;
 
     ///
-    fn collect(&self) -> Result<(), &'static str>;
+    fn collect(&self) -> Result<String, &'static str>;
 
     ///
     fn tick(&mut self) -> Result<(), &'static str>;
@@ -67,7 +67,7 @@ pub trait Environment {
         Self: Sized;
 
     ///
-    fn collect(&self) -> Result<(), &'static str>;
+    fn collect(&self) -> Result<String, &'static str>;
 
     ///
     fn tick(&mut self) -> Result<(), &'static str>;

@@ -207,11 +207,11 @@ impl Environment for DefaultEnvironment {
         Ok(Box::new(Self { population }))
     }
 
-    fn collect(&self) -> VoidResult {
+    fn collect(&self) -> Result<String, &'static str> {
         for agent in &self.population {
             agent.collect()?;
         }
-        Ok(())
+        Ok("".into())
     }
 
     fn tick(&mut self) -> VoidResult {
